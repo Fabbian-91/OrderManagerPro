@@ -18,14 +18,23 @@ public class OrderProcessor {
     private static final Logger logger = LoggerFactory.getLogger(OrderProcessor.class);
     private static OrderProcessor instance;
     
+    // Configuración de concurrencia
+    private static final int THREAD_POOL_SIZE = 3;
+    private static final int QUEUE_CAPACITY = 100;
+    private static final int ENQUEUE_TIMEOUT_SECONDS = 5;
+    private static final int WORKER_POLL_TIMEOUT_SECONDS = 1;
+    private static final int PROCESSING_DELAY_MS = 2000;
+    private static final int COMPLETION_DELAY_MS = 3000;
+    private static final int SCHEDULER_INTERVAL_MS = 10000;
+    
     private final ExecutorService executorService;
     private final BlockingQueue<Long> orderQueue;
     private final OrderDAO orderDAO;
     private volatile boolean running;
 
     private OrderProcessor() {
-        this.executorService = Executors.newFixedThreadPool(3);
-        this.orderQueue = new LinkedBlockingQueue<>(100);
+        this.executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        this.orderQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
         this.orderDAO = new OrderDAOImpl();
         this.running = false;
     }
@@ -50,7 +59,7 @@ public class OrderProcessor {
         logger.info("Iniciando procesador de pedidos...");
         
         // Iniciar workers
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < THREAD_POOL_SIZE; i++) {
             executorService.submit(new OrderWorker(i));
         }
         
@@ -80,7 +89,7 @@ public class OrderProcessor {
      */
     public boolean enqueueOrder(Long orderId) {
         try {
-            orderQueue.offer(orderId, 5, TimeUnit.SECONDS);
+            orderQueue.offer(orderId, ENQUEUE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             logger.info("Pedido {} encolado para procesamiento", orderId);
             return true;
         } catch (InterruptedException e) {
@@ -106,7 +115,7 @@ public class OrderProcessor {
             
             while (running) {
                 try {
-                    Long orderId = orderQueue.poll(1, TimeUnit.SECONDS);
+                    Long orderId = orderQueue.poll(WORKER_POLL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
                     if (orderId != null) {
                         processOrder(orderId);
                     }
@@ -125,7 +134,7 @@ public class OrderProcessor {
             
             try {
                 // Simular procesamiento (validación, pago, preparación)
-                Thread.sleep(2000);
+                Thread.sleep(PROCESSING_DELAY_MS);
                 
                 // Obtener el pedido
                 Order order = orderDAO.findById(orderId).orElse(null);
@@ -141,7 +150,7 @@ public class OrderProcessor {
                     logger.info("Worker {} cambió pedido {} a PROCESSING", workerId, orderId);
                     
                     // Simular preparación
-                    Thread.sleep(3000);
+                    Thread.sleep(COMPLETION_DELAY_MS);
                     
                     // Completar pedido
                     order.complete();
@@ -168,8 +177,8 @@ public class OrderProcessor {
             
             while (running) {
                 try {
-                    // Buscar pedidos pendientes cada 10 segundos
-                    Thread.sleep(10000);
+                    // Buscar pedidos pendientes cada intervalo configurado
+                    Thread.sleep(SCHEDULER_INTERVAL_MS);
                     
                     List<Order> pendingOrders = orderDAO.findPendingOrders();
                     logger.info("Scheduler encontró {} pedidos pendientes", pendingOrders.size());

@@ -23,6 +23,8 @@ public class CorsFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         // Configurar headers CORS
+        // SECURITY NOTE: In production, replace "*" with specific allowed origins
+        // Example: httpResponse.setHeader("Access-Control-Allow-Origin", "https://yourdomain.com");
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
