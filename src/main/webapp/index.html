@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderManagerPro - API Backend</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .endpoints {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .endpoint {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #28a745; color: white; }
+        .post { background: #007bff; color: white; }
+        .put { background: #ffc107; color: black; }
+        .delete { background: #dc3545; color: white; }
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 5px 0;
+        }
+        .feature {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 OrderManagerPro - Backend API</h1>
+    
+    <div class="info-box">
+        <h2>Descripción del Proyecto</h2>
+        <p>Backend en Java para gestión de usuarios, productos y pedidos con características avanzadas:</p>
+        <ul>
+            <li>✅ <span class="feature">POO Avanzada</span> - Herencia, polimorfismo, encapsulación</li>
+            <li>✅ <span class="feature">Colecciones y Genéricos</span> - List, Map, interfaces genéricas</li>
+            <li>✅ <span class="feature">Concurrencia</span> - Procesamiento de pedidos en segundo plano</li>
+            <li>✅ <span class="feature">I/O de Archivos</span> - Exportación/importación CSV</li>
+            <li>✅ <span class="feature">JDBC y PostgreSQL</span> - Persistencia con transacciones</li>
+            <li>✅ <span class="feature">Servlets</span> - API REST-like endpoints</li>
+        </ul>
+    </div>
+
+    <div class="endpoints">
+        <h2>📋 Endpoints Disponibles</h2>
+        
+        <h3>Usuarios</h3>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/users</code> - Listar todos los usuarios
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/users/{id}</code> - Obtener usuario por ID
+        </div>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/users</code> - Crear nuevo usuario
+        </div>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/users/{id}</code> - Actualizar usuario
+        </div>
+        <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/users/{id}</code> - Eliminar usuario
+        </div>
+
+        <h3>Productos</h3>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/products</code> - Listar todos los productos
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/products?category={cat}</code> - Filtrar por categoría
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/products?active=true</code> - Productos activos
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/products/{id}</code> - Obtener producto por ID
+        </div>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/products</code> - Crear nuevo producto
+        </div>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/products/{id}</code> - Actualizar producto
+        </div>
+        <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/products/{id}</code> - Eliminar producto
+        </div>
+
+        <h3>Pedidos</h3>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/orders</code> - Listar todos los pedidos
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/orders?userId={id}</code> - Pedidos de un usuario
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/orders?status={status}</code> - Filtrar por estado
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/orders/{id}</code> - Obtener pedido por ID
+        </div>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/orders</code> - Crear nuevo pedido (procesamiento asíncrono)
+        </div>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/orders/{id}</code> - Actualizar pedido
+        </div>
+        <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/orders/{id}</code> - Eliminar pedido
+        </div>
+
+        <h3>Exportación CSV</h3>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/export/users</code> - Exportar usuarios a CSV
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/export/products</code> - Exportar productos a CSV
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/export/orders</code> - Exportar pedidos a CSV
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/export/all</code> - Backup completo del sistema
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h2>⚙️ Configuración</h2>
+        <p>Para usar este backend:</p>
+        <ol>
+            <li>Crear base de datos PostgreSQL: <code>CREATE DATABASE ordermanager;</code></li>
+            <li>Ejecutar el script de schema: <code>src/main/resources/schema.sql</code></li>
+            <li>Configurar credenciales en: <code>src/main/resources/database.properties</code></li>
+            <li>Desplegar el WAR en un servidor de aplicaciones (Tomcat, Jetty, etc.)</li>
+        </ol>
+    </div>
+</body>
+</html>
